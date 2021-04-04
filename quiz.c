@@ -136,17 +136,21 @@ quizCreator(char *outfile)
 void
 saveScore(void)
 {
-	/* If file can be opened, save score to file */
-	save_file = fopen(savefile, "a+w");
+	/* Check if savefile is not empty */
+	if (strcmp(savefile, "") != 0) {
 
-	/* Get time */
-	time_t ltime = time(NULL);
+		/* If file can be opened, save score to file */
+		save_file = fopen(savefile, "a+w");
 
-	if (save_file != NULL)
-		fprintf(save_file, "Date: %sUsername: %s\nFinal score: %d\nLast question number: %d\n\n",
-				ctime(&ltime), username, usr_score, last_qnum);
+		/* Get time */
+		time_t ltime = time(NULL);
 
-	fclose(save_file);
+		if (save_file != NULL)
+			fprintf(save_file, "Date: %sUsername: %s\nFinal score: %d\nLast question number: %d\n\n",
+					ctime(&ltime), username, usr_score, last_qnum);
+
+		fclose(save_file);
+	}
 }
 
 /* Signal Handler */
@@ -304,10 +308,12 @@ main(int argc, char **argv)
 		corresponds to "exit", "quit", or "stop" (case sensitive!),
 		if reserve_special is 0 */
 		if (!reserve_special &&
-			!strcmp(user->ans, "exit") ||
+			(!strcmp(user->ans, "exit") ||
 			!strcmp(user->ans, "quit") ||
-			!strcmp(user->ans, "stop"))
+			!strcmp(user->ans, "stop"))) {
+				sigHandler(0);
 				return 0;
+		}
 
 		/* Check if answer is correct */
 		if (!strncasecmp(quiz->ans, user->ans, BUFSIZE)) {
@@ -335,8 +341,7 @@ main(int argc, char **argv)
 	fclose(dbfile);
 
 	/* Check if savefile is not empty */
-	if (strcmp(savefile, "") > 0)
-		saveScore();
+	saveScore();
 
 	return 0;
 }
