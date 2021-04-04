@@ -23,7 +23,7 @@
 #define BUFSIZE 70
 
 #define __QUIZ_VER_MAJOR "1"
-#define __QUIZ_VER_MINOR "0"
+#define __QUIZ_VER_MINOR "1"
 #define __QUIZ_VERSION __QUIZ_VER_MAJOR "." __QUIZ_VER_MINOR
 
 /* Quiz structure */
@@ -159,6 +159,8 @@ main(int argc, char **argv)
 	/* Save current user's name to username, if it is available */
 	if (!strncmp(getenv("USER"), "", 2))
 		strncpy(username, getenv("USER"), sizeof(username) - 1);
+
+	/* Could not get username, fallback to "Unknown" */
 	else
 		strncpy(username, "Unknown", sizeof(username) - 1);
 
@@ -190,17 +192,27 @@ main(int argc, char **argv)
 					"			questions to save_file\n"
 					"			(Max Length 50) Default: none\n"
 					"-u username		Add username \"username\" to save_file\n"
-					"			(Max Length 20) Default: current user (%s)\n", username);
+					"			(Max Length 20) Default: current user (%s)\n"
+					"-v			Set username to \"Unavailable\"\n",
+					username);
 			return 0;
+
 		/* Choose custom save file */
 		case 's':
 			strncpy(savefile, optarg, sizeof(savefile) - 1);
 			fprintf(stderr, "[Using file \"%s\" to save scores]\n", savefile);
 			break;
+
 		/* Choose custom username */
 		case 'u':
 			strncpy(username, optarg, sizeof(username) - 1);
 			fprintf(stderr, "[Using custom username \"%s\"]\n", username);
+			break;
+
+		/* Set username to "Unavailable" */
+		case 'v':
+			strncpy(username, "Unavailable", sizeof(username) - 1);
+			fprintf(stderr, "[Set username to \"Unavailable\"]\n");
 			break;
 		}
 
