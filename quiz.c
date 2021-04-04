@@ -51,6 +51,9 @@ static char savefile[50] = "";
 /* Custom username for savefile */
 static char username[20];
 
+/* Reserve special commands? (exit, quit, stop) */
+static int reserve_special = 0;
+
 /* Quiz DB file */
 FILE *dbfile;
 
@@ -186,7 +189,7 @@ main(int argc, char **argv)
 
 	/* Parse commandline options */
 	int optind = 0;
-	while ((optind = getopt(argc, argv, ":c:d:hs:u:")) != 1) {
+	while ((optind = getopt(argc, argv, ":c:d:hrs:u:v")) != 1) {
 		switch (optind) {
 		/* Enter quiz-creator mode, to create a new quiz database */
 		case 'c':
@@ -208,6 +211,8 @@ main(int argc, char **argv)
 					"-d quizdb		Use \"quizdb\" as a quiz database file\n"
 					"			(Max Length 20) Default: ./quiz.db\n"
 					"-h			Print this help\n"
+					"-r			Don't reserve special commands (exit, quit, stop)\n"
+					"			Default: 0 (reserve special commands)\n"
 					"-s save_file		Save date, time, final score and number of\n"
 					"			questions to save_file\n"
 					"			(Max Length 50) Default: none\n"
@@ -216,6 +221,12 @@ main(int argc, char **argv)
 					"-v			Set username to \"Unavailable\"\n",
 					username);
 			return 0;
+
+		/* Reserve special commands */
+		case 'r':
+			reserve_special = 1;
+			fprintf(stderr, "[Special commands are not allowed]\n");
+			break;
 
 		/* Choose custom save file */
 		case 's':
@@ -288,6 +299,15 @@ main(int argc, char **argv)
 		/* Store given answer */
 		fgets(user->ans, BUFSIZE, stdin);
 		user->ans[strlen(user->ans)-1] = '\0';
+
+		/* Before doing anything else, check if the user's answer
+		corresponds to "exit", "quit", or "stop" (case sensitive!),
+		if reserve_special is 0 */
+		if (!reserve_special) {
+			char cmds[3][4] = {"exit", "quit", "stop"};
+			if (!strstr(user->ans, *cmds))
+				return 0;
+		}
 
 		/* Check if answer is correct */
 		if (!strncasecmp(quiz->ans, user->ans, BUFSIZE)) {
