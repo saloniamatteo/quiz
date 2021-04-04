@@ -156,8 +156,11 @@ main(int argc, char **argv)
 	/* Default quiz database file */
 	char quizdb[20] = "quiz.db";
 
-	/* Save current user's name to username */
-	strncpy(username, getenv("USER"), sizeof(username) - 1);
+	/* Save current user's name to username, if it is available */
+	if (!strncmp(getenv("USER"), "", 2))
+		strncpy(username, getenv("USER"), sizeof(username) - 1);
+	else
+		strncpy(username, "Unknown", sizeof(username) - 1);
 
 	/* Parse commandline options */
 	int optind = 0;
