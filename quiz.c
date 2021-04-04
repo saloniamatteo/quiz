@@ -41,12 +41,24 @@ typedef struct quizUsr {
 
 /* User score */
 static int usr_score = 0;
+
 /* Last question number */
 static int last_qnum = 0;
+
 /* Savefile */
 static char savefile[50] = "";
+
 /* Custom username for savefile */
 static char username[20];
+
+/* Quiz DB file */
+FILE *dbfile;
+
+/* Quiz Creator file */
+FILE *crfile;
+
+/* Save Score file */
+FILE *save_file;
 
 /* Function prototypes */
 void quizCreator(char *);
@@ -58,9 +70,9 @@ void
 quizCreator(char *outfile)
 {
 	/* Check if file can be opened for writing */
-	FILE *file = fopen(outfile, "a+w");
+	crfile = fopen(outfile, "a+w");
 
-	if (file == NULL) {
+	if (crfile == NULL) {
 		fprintf(stderr, "ERROR: Could not Open file \"%s\"!\n", outfile);
 		exit(2);
 	}
@@ -107,12 +119,12 @@ quizCreator(char *outfile)
 		scanf("%d", &quiz->points);
 
 		/* Write values to outfile */
-		fprintf(file, "ID: %d;; Question: %s;; Answer: %s;; Points: %d\n",
+		fprintf(crfile, "ID: %d;; Question: %s;; Answer: %s;; Points: %d\n",
 				quiz->id, quiz->qst, quiz->ans, quiz->points);
 	}
 
 	/* Close file */
-	fclose(file);
+	fclose(crfile);
 	fprintf(stderr, "[Saved questions to file \"%s\"]\n", outfile);
 	exit(0);
 }
@@ -122,7 +134,7 @@ void
 saveScore(void)
 {
 	/* If file can be opened, save score to file */
-	FILE *save_file = fopen(savefile, "a+w");
+	save_file = fopen(savefile, "a+w");
 
 	/* Get time */
 	time_t ltime = time(NULL);
@@ -146,6 +158,14 @@ sigHandler(int sig)
 
 	/* Save score to file */
 	saveScore();
+
+	/* Close opened files, if any */
+	if (dbfile != NULL)
+		fclose(dbfile);
+	if (crfile != NULL)
+		fclose(crfile);
+	if (save_file != NULL)
+		fclose(save_file);
 
 	exit(0);
 }
@@ -221,9 +241,9 @@ main(int argc, char **argv)
 	}
 
 	/* Open quizdb */
-	FILE *file = fopen(quizdb, "r");
+	dbfile = fopen(quizdb, "r");
 
-	if (file == NULL) {
+	if (dbfile == NULL) {
 		fprintf(stderr, "Could not open file \"%s\"! Exiting...\n", quizdb);
 		return 1;
 	}
@@ -248,7 +268,7 @@ main(int argc, char **argv)
 	*/
 
 	/* Parse quiz database, store values, and ask questions to user */
-	while (fscanf(file, "ID: %d;; Question: %[^;;];; Answer: %[^;;];; Points: %d\n",
+	while (fscanf(dbfile, "ID: %d;; Question: %[^;;];; Answer: %[^;;];; Points: %d\n",
 			&quiz->id, quiz->qst, quiz->ans, &quiz->points) > 0) {
 
 		/* Handle signals */
@@ -292,7 +312,7 @@ main(int argc, char **argv)
 	}
 
 	/* Close file, we do not need it anymore */
-	fclose(file);
+	fclose(dbfile);
 
 	/* Check if savefile is not empty */
 	if (strcmp(savefile, "") > 0)
