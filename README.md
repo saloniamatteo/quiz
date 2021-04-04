@@ -80,20 +80,20 @@ make static
 
 ## Musl-GCC vs GCC
 + Time (Static) [`time make static`]
-- Musl-GCC compilation time: `0,11s user 0,02s system 47% cpu 0,270 total`
-- GCC compilation time: `0,19s user 0,03s system 52% cpu 0,401 total`
+	- Musl-GCC compilation time: `0,11s user 0,02s system 47% cpu 0,270 total`
+	- GCC compilation time: `0,19s user 0,03s system 52% cpu 0,401 total`
 
 + Time (Dynamic) [`time make`]
-- Musl-GCC compilation time: `0,09s user 0,02s system 47% cpu 0,232 total`
-- GCC compilation time: `0,13s user 0,00s system 50% cpu 0,250 total`
+	- Musl-GCC compilation time: `0,09s user 0,02s system 47% cpu 0,232 total`
+	- GCC compilation time: `0,13s user 0,00s system 50% cpu 0,250 total`
 
 + Executable Size (Static) [`ls -l quiz`]
-- Musl-GCC size: `73k`
-- GCC size: `978k`
+	- Musl-GCC size: `73k`
+	- GCC size: `978k`
 
 + Executable Size (Dynamic) [`ls -l quiz`]
-- Musl-GCC size: `16k`
-- GCC size: `18k`
+	- Musl-GCC size: `16k`
+	- GCC size: `18k`
 
 ## Help
 If you need help, you can:
