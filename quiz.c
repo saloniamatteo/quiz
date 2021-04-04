@@ -303,11 +303,11 @@ main(int argc, char **argv)
 		/* Before doing anything else, check if the user's answer
 		corresponds to "exit", "quit", or "stop" (case sensitive!),
 		if reserve_special is 0 */
-		if (!reserve_special) {
-			char cmds[3][4] = {"exit", "quit", "stop"};
-			if (!strstr(user->ans, *cmds))
+		if (!reserve_special &&
+			!strcmp(user->ans, "exit") ||
+			!strcmp(user->ans, "quit") ||
+			!strcmp(user->ans, "stop"))
 				return 0;
-		}
 
 		/* Check if answer is correct */
 		if (!strncasecmp(quiz->ans, user->ans, BUFSIZE)) {
