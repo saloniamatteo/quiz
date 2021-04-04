@@ -12,14 +12,15 @@ Initially written on April 24, 2021. Current version can be found in `quiz.c`
 ## Flags
 Currently, `quiz` supports the following command-line flags:
 
-| Flag | Argument | Description                              |
-|------|----------|------------------------------------------|
-| `-c` | Required | Enter [Quiz-Creator](#Quiz-Creator) mode |
-| `-d` | Required | Load a custom quiz database              |
-| `-h` | Optional | Print help and exit                      |
-| `-s` | Required | Save scores to file                      |
-| `-u` | Required | Set custom username to use in save file  |
-| '-v' | None     | Disable username                         |
+| Flag | Argument | Description                                  |
+|------|----------|----------------------------------------------|
+| `-c` | Required | Enter [Quiz-Creator](#Quiz-Creator) mode     |
+| `-d` | Required | Load a custom quiz database                  |
+| `-h` | Optional | Print help and exit                          |
+| `-s` | Required | Save scores to file                          |
+| `-r` | None     | Disallow special commands (exit, quit, stop) |
+| `-u` | Required | Set custom username to use in save file      |
+| '-v' | None     | Disable username                             |
 
 ## Quiz-Creator
 `quiz` features a Quiz-Creator, which simply lets any user to create quiz databases, especially if they do not want to
