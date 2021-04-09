@@ -7,7 +7,7 @@ It features a quiz creator, and the core quiz program.
 It can also save scores to a custom file, read a custom quiz database,
 use a custom username, and store how many questions were taken.
 
-Initially written on April 24, 2021. Current version can be found in `quiz.c`
+Initially written on March 24, 2021. Current version can be found in `quiz.c`
 
 ## Flags
 Currently, `quiz` supports the following command-line flags:
