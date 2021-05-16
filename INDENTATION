@@ -1,0 +1,242 @@
+Written by Salonia Matteo	<saloniamatteo@pm.me>
+				<matteo@mail.saloniamatteo.top>
+
+If you want to work on this project, you have to follow these
+indentation rules. To make your job easier, use
+the following GNU indent command/alias:
+
+indent -bad -bap -bbo -blf -br -brs -c33 -cbi0 -cd33 -ce -ci4
+-cli0 -cp33 -d0 -di1 -hnl -i8 -il1 -ip5 -l80 -lp -nbc -ncdb -ncs
+-nfca -nfc1 -nsc -npcs -nprs -psl -saf -sai -saw -ss -sob -ts8 -ut
+
+This is my custom style, which closely follows the Linux style,
+but also uses some elements of the GNU coding style.
+
+Before we begin: if you don't use tabs for indentation,
+you are utterly deranged and should seek help.
+
+Below are the rules I told you about in the text above.
+As always, respect the 80 character line limit ("-l80" indent option)
+
+0. C standard
+	Always use C99, without extensions,
+	following the POSIX standard POSIX.1-2008,
+	by defining "_POSIX_C_SOURCE 200809L".
+
+1. Headers
+	Very simply, headers should be placed in an
+	alphabetical order, if order does not matter.
+
+	Note, however, that you should first include
+	system headers (#include <stdio.h>), then
+	add a blank line, then include your local
+	headers, if any. (#include "my-header.h")
+
+2. Comments
+	You should always use "/* */" for comments,
+	not "//", unless you are testing something,
+	and you need to rapidly comment something.
+
+	Ideally, you should write comments like this,
+	when creating a new program: (write at the top)
+
+	/* See LICENSE file for copyright and license details.
+	 *
+	 * <Program Name>, <Brief Description>
+	 * <Short list of Features>
+	 *
+	 * <Program Creator Info and Email address>
+	 *
+	 * <Some other important info>
+	 *
+	 */
+
+	If, instead, you are writing comments explaining how
+	the code works, try to keep this structure:
+
+	/*
+	 * <Brief Description explaining why we are
+	 * writing the code below>
+	 */
+
+3. Functions
+	Functions are declared as follows:
+
+	int
+	my_function(int foo, char *bar)
+	{
+		printf("Foo number: %d\n", foo);
+		printf("Bar string: %s\n", bar);
+		return 0;
+	}
+
+4. Function calls
+	When calling a function, one must not
+	add any spaces between the function name,
+	and the parentheses, like this:
+
+	my_function(1, "Hello, World!");
+
+	The following is WRONG:
+
+	my_function (1, "Hello, World!");
+
+	The following is VERY WRONG!:
+
+	my_function ( 1, "Hello, World!" );
+
+5. If/Else statements
+	If statements follow the opposite reasoning
+	of function calls, in the sense that you have to
+	add a space between the "if" condition, and
+	the opening parenthese:
+
+	if (condition)
+		foo;
+
+	When dealing with just one line after the condition,
+	you should not use curly brackets "{" and "}", just
+	like the example above. Same thing if you have
+	a single line after an "else" statement:
+
+	if (condition)
+		foo;
+	else
+		bar;
+
+	However, when you have multiple lines, and an
+	"else" statement, you have to write it as follows:
+
+	if (condition) {
+		foo;
+		bar;
+	} else {
+		bar;
+		baz;
+	}
+
+	Taken straight from the Kernel indentation documentation:
+	Don't put multiple statements on a single line unless you have
+	something to hide:
+
+	if (condition) do_this;
+	  do_something_everytime;
+
+	Don't use commas to avoid using braces:
+
+	if (condition)
+		do_this(), do_that();
+
+6. Switch statements
+	Switch statements are very similar to If/Else statements.
+	However, you must not add another layer of indentation,
+	when writing "case":
+
+	switch (something) {
+	case 1:
+		foo;
+		break;
+
+	case 2:
+		bar;
+		break;
+
+	case 3:
+	default:
+		baz;
+		break;
+	}
+
+	As you can see, you have to write fallthrough cases like
+	I did in the example above (see "case 3" and "default").
+
+7. Do While loops
+	As you might have guessed, you have to write
+	Do While statements as follows:
+
+	do {
+		foo;
+		bar;
+		baz;
+	} while (condition);
+
+8. Pointers
+	Many people write pointers like this:
+	int*, char*, void*, ...
+
+	This is just stupid. Instead, write pointers like this:
+	int *, char *, void *, ...
+
+	If you are one of many who write pointers like the first
+	example, look at the example below:
+
+	int* one, two;
+
+	Now tell me: do the variables "one" and "two" have the same
+	type? If you would have replied yes, then congratulations,
+	you've just proven my point. (In fact, "one" is an integer
+	pointer, and "two" is just an integer).
+
+	So, the code above is clearer, written using the second way:
+
+	int *one, two;
+
+9. For loops
+	When writing for loops, you don't have to declare the
+	iterative variable (often i) beforehand:
+
+	for (int i = 0; i < MAXSZ; i++) {
+		foo;
+		bar;
+	}
+
+	If you need the final value, instead of declaring "i"
+	before the loop, just do something like this:
+
+	int result = 0;
+
+	for (int i = 0; i < MAXSZ; i++) {
+		foo;
+		bar;
+
+		if (i == MAXSZ - 1)
+			result = i;
+	}
+
+10. Loops
+	This information is relevant to both While and For loops.
+	(Taken from Kernel indentation documentation)
+
+	Use braces when a loop contains more than a single simple statement:
+
+	while (condition) {
+		if (foo)
+			bar;
+	}
+
+11. sizeof()
+	When dealing with sizeof(), you should NEVER use spaces,
+	not between "sizeof" and "(", nor inside the parentheses:
+
+	sizeof(char);
+
+	Unless you're doing something like:
+
+	sizeof(struct foo * 2);
+
+	In which case it is OK. If you write code like the example
+	below, just like I said earlier, you are utterly deranged,
+	and should seek help:
+
+	sizeof( struct foo );
+
+	Or even worse:
+
+	sizeof ( struct foo );
+
+12. Master/Slave terminology
+	Contrary to popular belief, the usage of "Master/Slave" is enforced.
+	If you use some other terminology, like "Primary", "Main", etc.,
+	you are, in fact, retarded, and you should cope, seethe, dilate.
+
+	Same thing goes for Blacklist/Whitelist.
