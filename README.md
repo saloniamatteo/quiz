@@ -7,7 +7,8 @@ It features a quiz creator, and the core quiz program.
 It can also save scores to a custom file, read a custom quiz database,
 use a custom username, and store how many questions were taken.
 
-Initially written on March 24, 2021. Current version can be found in `quiz.c`
+Initially written on March 24, 2021.
+Current version can be found in `quiz.c`, or by running `make version` (see [Installation](#Installation))
 
 ## Flags
 Currently, `quiz` supports the following command-line flags:
@@ -63,10 +64,28 @@ Enter how many points to give to the user.
 The resulting file `mynewdb` will have the following contents:
 
 ```
+# QuizDB generated automatically by quiz on dd/mm/YYYY at HH:MM:SS
 ID: 1;; Question: Who created this program (quiz)?;; Answer: Matteo Salonia;; Points: 50
 ID: 2;; Question: Did you donate to Matteo?;; Answer: Yes;; Points: 100
 ID: 3;; Question: Do you like this program?;; Answer: Absolutely;; Points: 45
 ```
+
+(Note: dd/mm/YYYY correspond to day, month, year, and HH:MM:SS correspond to hours, minutes, seconds)
+
+## Installation
+`quiz` uses GNU AutoTools to increase its portabilty and flexibility.
+
+Normally, users should run the following commands, to install `quiz`:
+
+```bash
+./configure
+make
+make install
+```
+
+This will install `quiz`, and the default QuizDB `quiz.db` (in /usr/local/share/quiz)
+
+If, for some reason, you cannot run the commands above, run `autoreconf --install`, then retry.
 
 ## Statically linking & building
 If you want to statically link `quiz` to share it, all you need is a compiler. (No fancy libraries used)
