@@ -10,6 +10,8 @@ use a custom username, and store how many questions were taken.
 Initially written on March 24, 2021.
 Current version can be found in `quiz.c`, or by running `make version` (see [Installation](#Installation))
 
+If you plan to work on `quiz`, be sure to read `INDENTATION`.
+
 ## Flags
 Currently, `quiz` supports the following command-line flags:
 
