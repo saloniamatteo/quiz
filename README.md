@@ -12,6 +12,8 @@ Current version can be found in `quiz.c`, or by running `make version` (see [Ins
 
 If you plan to work on `quiz`, be sure to read `INDENTATION`.
 
+Support this project: https://saloniamatteo.top/donate.html
+
 ## Flags
 Currently, `quiz` supports the following command-line flags:
 
