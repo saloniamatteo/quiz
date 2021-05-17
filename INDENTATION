@@ -70,7 +70,6 @@ As always, respect the 80 character line limit ("-l80" indent option)
 		return 0;
 	}
 
-<<<<<<< HEAD
 	Notice how the type of the function is not
 	on the same line as the function name,
 	and the opening curly brace "{" has its own line.
@@ -84,8 +83,6 @@ As always, respect the 80 character line limit ("-l80" indent option)
 	You don't need to include parameter names in the
 	function prototype, just its argument types.
 
-=======
->>>>>>> 3c0b0e32bf83d5d925ed3cd5eb975d7e8c8e7927
 4. Function calls
 	When calling a function, one must not
 	add any spaces between the function name,
