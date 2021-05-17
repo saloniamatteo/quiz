@@ -19,7 +19,7 @@ Currently, `quiz` supports the following command-line flags:
 |------|----------|----------------------------------------------|
 | `-c` | Required | Enter [Quiz-Creator](#Quiz-Creator) mode     |
 | `-d` | Required | Load a custom quiz database                  |
-| `-h` | Optional | Print help and exit                          |
+| `-h` | None     | Print help and exit                          |
 | `-s` | Required | Save scores to file                          |
 | `-r` | None     | Disallow special commands (exit, quit, stop) |
 | `-u` | Required | Set custom username to use in save file      |
