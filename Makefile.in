@@ -252,6 +252,7 @@ MKDIR_P = @MKDIR_P@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
+PACKAGE_DONATE = @PACKAGE_DONATE@
 PACKAGE_NAME = @PACKAGE_NAME@
 PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
@@ -320,9 +321,6 @@ OPTS = -Ofast
 
 # CPU-Specific Optimizations
 CPUOPTS = -march=native -mtune=native
-
-# CFLAGS: additional compiler flags
-AM_CFLAGS = -Wall $(CSTD) $(LINKER) $(OPTS) $(CPUOPTS)
 
 # Source code location
 quiz_SOURCES = src/quiz.c
@@ -834,6 +832,9 @@ uninstall-am: uninstall-binPROGRAMS uninstall-docDATA
 .PRECIOUS: Makefile
 
 
+# CFLAGS: additional compiler flags
+override CFLAGS = -Wall $(CSTD) $(LINKER) $(OPTS) $(CPUOPTS)
+
 # Clean the project directory
 cleandir:
 	make mostlyclean
@@ -848,6 +849,7 @@ info:
 	@echo "${PACKAGE_STRING} made by ${AUTHOR}."
 	@echo "Report any bugs to ${PACKAGE_BUGREPORT}."
 	@echo "Homepage: ${PACKAGE_URL}"
+	@echo "Support this project: ${PACKAGE_DONATE}"
 
 # Alias "uninstall-docDATA" to "uninstall-doc"
 uninstall-doc: uninstall-docDATA

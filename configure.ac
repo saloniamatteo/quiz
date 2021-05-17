@@ -17,6 +17,7 @@ AC_CHECK_HEADER_STDBOOL
 
 AC_SUBST([AUTHOR], ["Matteo Salonia"])
 AC_SUBST([PACKAGE_URL], ["https://github.com/saloniamatteo/quiz"])
+AC_SUBST([PACKAGE_DONATE], ["https://saloniamatteo.top/donate.html"])
 
 AM_INIT_AUTOMAKE([gnu subdir-objects])
 AC_CONFIG_FILES([Makefile])

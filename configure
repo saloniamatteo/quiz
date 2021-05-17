@@ -662,6 +662,7 @@ am__isrc
 INSTALL_DATA
 INSTALL_SCRIPT
 INSTALL_PROGRAM
+PACKAGE_DONATE
 AUTHOR
 EGREP
 GREP
@@ -3483,6 +3484,8 @@ fi
 AUTHOR="Matteo Salonia"
 
 PACKAGE_URL="https://github.com/saloniamatteo/quiz"
+
+PACKAGE_DONATE="https://saloniamatteo.top/donate.html"
 
 
 am__api_version='1.16'
