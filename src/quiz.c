@@ -16,23 +16,20 @@
 #define _FORTIFY_SOURCE 2
 #define _POSIX_C_SOURCE 200809L
 
+#include <err.h>
+#include <getopt.h>
+#include <pwd.h>
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <strings.h>
-#include <signal.h>
-#include <getopt.h>
-#include <unistd.h>
-#include <time.h>
 #include <sys/types.h>
-#include <pwd.h>
-#include <err.h>
+#include <time.h>
+#include <unistd.h>
+#include "config.h"
 
 #define BUFSIZE 70
-
-#define __QUIZ_VER_MAJOR "1"
-#define __QUIZ_VER_MINOR "2"
-#define __QUIZ_VERSION __QUIZ_VER_MAJOR "." __QUIZ_VER_MINOR
 
 #define QUIZ_TMP	"quiz-tmp"
 #define QUIZDB_DEFAULT	"/usr/local/share/quiz/quiz.db"
@@ -206,17 +203,17 @@ main(int argc, char **argv)
 	/* Default quiz database file */
 	char quizdb[20] = "quiz.db";
 
-	/* Try to get current username from env */
+	/* Try to get current username from env,
+	 * if function secure_getenv is available */
+	#if HAVE_SECURE_GETENV
 	char *user_env = secure_getenv("USER");
 
 	/* Check if we have a valid username */
-	if (user_env == NULL)
-		strncpy(username, "Unknown", sizeof(username) - 1);
-
-	else if (!strncmp(user_env, "", 2))
+	if (!strncmp(user_env, "", 2))
 		strncpy(username, user_env, sizeof(username) - 1);
 
 	else
+	#endif
 		strncpy(username, "Unknown", sizeof(username) - 1);
 
 	/* Parse commandline options */
@@ -255,8 +252,9 @@ main(int argc, char **argv)
 				"			(Max Length 50) Default: none\n"
 				"-u username		Add username \"username\" to save_file\n"
 				"			(Max Length 20) Default: current user (%s)\n"
-				"-v			Set username to \"Unavailable\"\n",
-				username);
+				"-v			Set username to \"Unavailable\"\n\n"
+				"Submit any bugs to %s.\n",
+				username, PACKAGE_BUGREPORT);
 			return 0;
 
 			/* Reserve special commands */
@@ -311,7 +309,7 @@ main(int argc, char **argv)
 	quizUsr user[BUFSIZE] = { 0 };
 
 	/* Print program version */
-	printf("Welcome to quiz version %s.\n", __QUIZ_VERSION);
+	printf("Welcome to %s. Submit any bugs to %s.\n", PACKAGE_STRING, PACKAGE_BUGREPORT);
 
 	FILE *fd;
 	char *buf = NULL;
