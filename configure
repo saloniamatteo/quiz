@@ -3607,6 +3607,7 @@ fi
 done
 
 
+# Package info
 AUTHOR="Matteo Salonia"
 
 PACKAGE_URL="https://github.com/saloniamatteo/quiz"
@@ -3614,6 +3615,7 @@ PACKAGE_URL="https://github.com/saloniamatteo/quiz"
 PACKAGE_DONATE="https://saloniamatteo.top/donate.html"
 
 
+# Automake
 am__api_version='1.16'
 
 # Find a good install program.  We prefer a C program (faster),

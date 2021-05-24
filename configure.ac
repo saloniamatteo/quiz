@@ -17,10 +17,12 @@ AC_CHECK_HEADERS([stdio.h stdlib.h string.h strings.h signal.h unistd.h getopt.h
 AC_CHECK_HEADER_STDBOOL
 AC_CHECK_FUNCS(secure_getenv)
 
+# Package info
 AC_SUBST([AUTHOR], ["Matteo Salonia"])
 AC_SUBST([PACKAGE_URL], ["https://github.com/saloniamatteo/quiz"])
 AC_SUBST([PACKAGE_DONATE], ["https://saloniamatteo.top/donate.html"])
 
+# Automake
 AM_INIT_AUTOMAKE([gnu subdir-objects])
 AC_CONFIG_FILES([Makefile])
 AC_PROG_CC
