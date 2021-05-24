@@ -13,9 +13,6 @@ CSTD = -std=c99
 # Optimizations. Can be -O0, -O1, -O2, -O3, -Os, -Ofast
 OPTS = -Ofast
 
-# CPU-Specific Optimizations
-CPUOPTS = -march=native -mtune=native
-
 # CFLAGS: additional compiler flags
 override CFLAGS = -Wall $(CSTD) $(LINKER) $(OPTS) $(CPUOPTS)
 
