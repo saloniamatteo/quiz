@@ -58,18 +58,18 @@ static char savefile[50] = "";	/* Savefile */
 static char username[20];	/* Custom username for savefile */
 static char *tmp_file;		/* Temporary file */
 static char cur_time[30];	/* Current time */
-FILE *dbfile;			/* Quiz DB file */
-FILE *crfile;			/* Quiz Creator file */
-FILE *save_file;		/* Save Score file */
+static FILE *dbfile;		/* Quiz DB file */
+static FILE *crfile;		/* Quiz Creator file */
+static FILE *save_file;		/* Save Score file */
 
 /* Function prototypes */
-void save_time(char *);
-void quizCreator(char *);
-void saveScore(void);
-void sigHandler(int);
+static void save_time(char *);
+static void quizCreator(char *);
+static void saveScore(void);
+static void sigHandler(int);
 
 /* Save current time into cur_time */
-void
+static void
 save_time(char *format)
 {
 	time_t ltime = time(NULL);
@@ -79,7 +79,7 @@ save_time(char *format)
 }
 
 /* Create a new quiz database */
-void
+static void __attribute__((noreturn))
 quizCreator(char *outfile)
 {
 	/* Check if file can be opened for writing */
@@ -156,7 +156,7 @@ quizCreator(char *outfile)
 }
 
 /* Save score to file */
-void
+static void
 saveScore(void)
 {
 	/* Check if savefile is not empty */
@@ -177,7 +177,7 @@ saveScore(void)
 }
 
 /* Signal Handler */
-void
+static void __attribute__((noreturn))
 sigHandler(int sig)
 {
 	/* Print gotten signal */
@@ -215,10 +215,10 @@ main(int argc, char **argv)
 		strncpy(username, "Unknown", sizeof(username) - 1);
 
 	/* Parse commandline options */
-	int optind = 0;
+	int ind = 0;
 
-	while ((optind = getopt(argc, argv, ":c:d:hrs:u:v")) != 1) {
-		switch (optind) {
+	while ((ind = getopt(argc, argv, ":c:d:hrs:u:v")) != 1) {
+		switch (ind) {
 			/* Enter quiz-creator mode, to create a new quiz database */
 		case 'c':
 			fprintf(stderr, "[Entering Quiz-Creator mode...]\n");
@@ -281,7 +281,7 @@ main(int argc, char **argv)
 			break;
 		}
 
-		if (optind <= 0)
+		if (ind <= 0)
 			break;
 	}
 
@@ -346,8 +346,8 @@ Attempting to write into user's home directory...\n", QUIZ_TMP);
 
 		tmp_file = pw->pw_dir;
 
-		strncat(tmp_file, "/", 1);
-		strncat(tmp_file, QUIZ_TMP, strlen(QUIZ_TMP));
+		strncat(tmp_file, "/", 2);
+		strncat(tmp_file, QUIZ_TMP, strlen(QUIZ_TMP) + 1);
 
 		fd = fopen(tmp_file, "w");
 
@@ -357,7 +357,7 @@ Attempting to write into user's home directory...\n", QUIZ_TMP);
 				tmp_file, QUIZ_TMP);
 
 			strncpy(tmp_file, "/tmp/", 6);
-			strncat(tmp_file, QUIZ_TMP, strlen(QUIZ_TMP));
+			strncat(tmp_file, QUIZ_TMP, strlen(QUIZ_TMP) + 1);
 
 			fd = fopen(tmp_file, "w");
 
@@ -377,7 +377,7 @@ Attempting to write into user's home directory...\n", QUIZ_TMP);
 		case '\t':
 			break;
 		default:
-			fprintf(fd, buf);
+			fprintf(fd, "%s", buf);
 			break;
 		}
 	}
