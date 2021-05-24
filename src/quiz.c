@@ -206,11 +206,16 @@ main(int argc, char **argv)
 	/* Default quiz database file */
 	char quizdb[20] = "quiz.db";
 
-	/* Save current user's name to username, if it is available */
-	if (!strncmp(getenv("USER"), "", 2))
-		strncpy(username, getenv("USER"), sizeof(username) - 1);
+	/* Try to get current username from env */
+	char *user_env = secure_getenv("USER");
 
-	/* Could not get username, fallback to "Unknown" */
+	/* Check if we have a valid username */
+	if (user_env == NULL)
+		strncpy(username, "Unknown", sizeof(username) - 1);
+
+	else if (!strncmp(user_env, "", 2))
+		strncpy(username, user_env, sizeof(username) - 1);
+
 	else
 		strncpy(username, "Unknown", sizeof(username) - 1);
 
