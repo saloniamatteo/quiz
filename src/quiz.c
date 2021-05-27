@@ -27,7 +27,14 @@
 #include <sys/types.h>
 #include <time.h>
 #include <unistd.h>
+
+#ifdef HAVE_CONFIG_H
 #include "config.h"
+#else
+#define PACKAGE_BUGREPORT "saloniamatteo@pm.me"
+#define PACKAGE_DONATE "https://saloniamatteo.top/donate.html"
+#define PACKAGE_STRING "quiz 1.4"
+#endif
 
 #define BUFSIZE 70
 
@@ -264,8 +271,9 @@ main(int argc, char **argv)
 				"-u username		Add username \"username\" to save_file\n"
 				"			(Max Length 20) Default: current user (%s)\n"
 				"\n"
-				"Submit any bugs to %s.\n",
-				username, PACKAGE_BUGREPORT);
+				"Submit any bugs to %s.\n"
+				"Support this project: %s\n",
+				username, PACKAGE_BUGREPORT, PACKAGE_DONATE);
 			return 0;
 			break;
 
@@ -319,9 +327,6 @@ main(int argc, char **argv)
 
 	/* Create new user */
 	quizUsr user[BUFSIZE] = { 0 };
-
-	/* Print program version */
-	printf("Welcome to %s. Submit any bugs to %s.\n", PACKAGE_STRING, PACKAGE_BUGREPORT);
 
 	FILE *fd;
 	char *buf = NULL;

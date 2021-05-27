@@ -33,7 +33,7 @@ cleandir:
 	make mostlyclean
 	make clean
 	make distclean
-	rm -rf autom4te.cache aclocal.m4 *.tar.gz
+	rm -rf autom4te.cache aclocal.m4 *.tar.gz quiz-tmp
 
 version:
 	@echo ${VERSION}

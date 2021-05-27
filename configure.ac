@@ -3,7 +3,7 @@
 
 AC_PREREQ([2.69])
 
-AC_INIT([quiz], [1.3], [saloniamatteo@pm.me])
+AC_INIT([quiz], [1.4], [saloniamatteo@pm.me])
 AC_CONFIG_SRCDIR([src])
 
 # Checks for programs.
