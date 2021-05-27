@@ -21,11 +21,12 @@ Currently, `quiz` supports the following command-line flags:
 |------|----------|----------------------------------------------|
 | `-c` | Required | Enter [Quiz-Creator](#Quiz-Creator) mode     |
 | `-d` | Required | Load a custom quiz database                  |
+| `-E` | None     | Only run the QuizDB preprocessor             |
 | `-h` | None     | Print help and exit                          |
+| `-n` | None     | Set username to "Unknown"                    |
 | `-s` | Required | Save scores to file                          |
 | `-r` | None     | Disallow special commands (exit, quit, stop) |
 | `-u` | Required | Set custom username to use in save file      |
-| `-v` | None     | Disable username                             |
 
 ## Quiz-Creator
 `quiz` features a Quiz-Creator, which simply lets any user to create quiz databases, especially if they do not want to

@@ -48,16 +48,17 @@ typedef struct quizUsr {
 } quizUsr;
 
 /* Global variables */
-static int usr_score = 0;	/* User score */
-static int last_qnum = 0;	/* Last question number */
-static int reserve_special = 0;	/* Reserve special commands? (exit, quit, stop) */
-static char savefile[50] = "";	/* Savefile */
-static char username[20];	/* Custom username for savefile */
+static FILE *crfile;		/* Quiz Creator file */
+static FILE *dbfile;		/* Quiz DB file */
+static FILE *save_file;		/* Save Score file */
 static char *tmp_file;		/* Temporary file */
 static char cur_time[30];	/* Current time */
-static FILE *dbfile;		/* Quiz DB file */
-static FILE *crfile;		/* Quiz Creator file */
-static FILE *save_file;		/* Save Score file */
+static char savefile[50] = "";	/* Savefile */
+static char username[20];	/* Custom username for savefile */
+static int last_qnum = 0;	/* Last question number */
+static int preproc_only = 0;	/* Only run QuizDB preprocessor */
+static int reserve_special = 0;	/* Reserve special commands? (exit, quit, stop) */
+static int usr_score = 0;	/* User score */
 
 /* Function prototypes */
 static void save_time(char *);
@@ -164,12 +165,13 @@ saveScore(void)
 
 		save_time("%d/%m/%Y at %T");
 
-		if (save_file != NULL)
+		if (save_file != NULL) {
 			fprintf(save_file,
 				"Date: %sUsername: %s\nFinal score: %d\nLast question number: %d\n\n",
 				cur_time, username, usr_score, last_qnum);
 
-		fclose(save_file);
+			fclose(save_file);
+		}
 	}
 }
 
@@ -189,10 +191,9 @@ sigHandler(int sig)
 	/* Close opened files, if any */
 	if (dbfile != NULL)
 		fclose(dbfile);
+
 	if (crfile != NULL)
 		fclose(crfile);
-	if (save_file != NULL)
-		fclose(save_file);
 
 	exit(0);
 }
@@ -219,24 +220,31 @@ main(int argc, char **argv)
 	/* Parse commandline options */
 	int ind = 0;
 
-	while ((ind = getopt(argc, argv, ":c:d:hrs:u:v")) != 1) {
+	while ((ind = getopt(argc, argv, ":c:d:Ehrs:u:v")) != 1) {
 		switch (ind) {
-			/* Enter quiz-creator mode, to create a new quiz database */
+		/* Enter quiz-creator mode, to create a new quiz database */
 		case 'c':
 			fprintf(stderr, "[Entering Quiz-Creator mode...]\n");
 			quizCreator(optarg);
 			break;
 
-			/* Choose custom quizdb file */
+		/* Choose custom quizdb file */
 		case 'd':
 			strncpy(quizdb, optarg, sizeof(quizdb) - 1);
 			fprintf(stderr, "[Using quizdb file \"%s\"]\n", quizdb);
 			break;
-			/* Print help & usage */
+
+		/* Only run the QuizDB preprocessor */
+		case 'E':
+			fprintf(stderr, "[Only running QuizDB preprocessor]\n");
+			preproc_only = 1;
+			break;
+
+		/* Print help & usage */
 		case 'h':
 		case '?':
 			fprintf(stderr,
-				"Usage: %s [-c quizdb] [-d quizdb] [-h] [-s save_file] [-u username]\n\n",
+				"Usage: %s [-c quizdb] [-d quizdb] [-E] [-h] [-n] [-s save_file] [-u username]\n\n",
 				argv[0]);
 			fprintf(stderr,
 				"-c quizdb		Enter quiz-creator mode, to create a new\n"
@@ -244,7 +252,10 @@ main(int argc, char **argv)
 				"			(Max Length 20)\n"
 				"-d quizdb		Use \"quizdb\" as a quiz database file\n"
 				"			(Max Length 20) Default: ./quiz.db\n"
+				"-E			Only run the QuizDB preprocessor, and\n"
+				"			output the file save location\n"
 				"-h			Print this help\n"
+				"-n			Set username to \"Unavailable\"\n"
 				"-r			Don't reserve special commands (exit, quit, stop)\n"
 				"			Default: 0 (reserve special commands)\n"
 				"-s save_file		Save date, time, final score and number of\n"
@@ -252,35 +263,36 @@ main(int argc, char **argv)
 				"			(Max Length 50) Default: none\n"
 				"-u username		Add username \"username\" to save_file\n"
 				"			(Max Length 20) Default: current user (%s)\n"
-				"-v			Set username to \"Unavailable\"\n\n"
+				"\n"
 				"Submit any bugs to %s.\n",
 				username, PACKAGE_BUGREPORT);
 			return 0;
+			break;
 
-			/* Reserve special commands */
+		/* Set username to "Unavailable" */
+		case 'n':
+			strncpy(username, "Unavailable", sizeof(username) - 1);
+			fprintf(stderr, "[Set username to \"Unavailable\"]\n");
+			break;
+
+		/* Reserve special commands */
 		case 'r':
 			reserve_special = 1;
 			fprintf(stderr, "[Special commands are not allowed]\n");
 			break;
 
-			/* Choose custom save file */
+		/* Choose custom save file */
 		case 's':
 			strncpy(savefile, optarg, sizeof(savefile) - 1);
 			fprintf(stderr, "[Using file \"%s\" to save scores]\n",
 				savefile);
 			break;
 
-			/* Choose custom username */
+		/* Choose custom username */
 		case 'u':
 			strncpy(username, optarg, sizeof(username) - 1);
 			fprintf(stderr, "[Using custom username \"%s\"]\n",
 				username);
-			break;
-
-			/* Set username to "Unavailable" */
-		case 'v':
-			strncpy(username, "Unavailable", sizeof(username) - 1);
-			fprintf(stderr, "[Set username to \"Unavailable\"]\n");
 			break;
 		}
 
@@ -383,6 +395,13 @@ Attempting to write into user's home directory...\n", QUIZ_TMP);
 			fprintf(fd, "%s", buf);
 			break;
 		}
+	}
+
+	/* Exit, if we only need to run the QuizDB preprocessor */
+	if (preproc_only == 1) {
+		fprintf(stderr, "[Saved pre-processed file to %s]\n", tmp_file);
+		fclose(fd);
+		return 0;
 	}
 
 	/* Open fd in read-only mode */
